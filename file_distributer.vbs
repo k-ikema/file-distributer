@@ -22,7 +22,7 @@ Mode = Lcase(Args(0))
 Set FileSys = CreateObject("Scripting.FileSystemObject")
 
 ScriptPath = Replace(WScript.ScriptFullName, WScript.ScriptName, "")
-FilePath   = Args(2) '‘ÎÛƒtƒ@ƒCƒ‹‚ÌƒtƒHƒ‹ƒ_ƒpƒX
+FilePath   = Args(2) 'ï¿½ÎÛƒtï¿½@ï¿½Cï¿½ï¿½ï¿½Ìƒtï¿½Hï¿½ï¿½ï¿½_ï¿½pï¿½X
 
 set Folder = FileSys.getFolder(FilePath)
 
@@ -67,7 +67,7 @@ Set FileSys = Nothing
 Wscript.echo "Finish."
 
 
-' ˆø”ƒ`ƒFƒbƒN
+' ï¿½ï¿½ï¿½ï¿½ï¿½`ï¿½Fï¿½bï¿½N
 Function checkArguments(Args)
     Dim chkFS
     Dim ErrMsg
@@ -78,12 +78,12 @@ Function checkArguments(Args)
     set chkFS = CreateObject("Scripting.FileSystemObject")
 
     ErrMsg = ErrMsg & "Usage : " & vbcrlf & _
-    "  move.vbs mode file_list work_dir" &  vbcrlf & vbcrlf & _ 
+    "  file_distributer.vbs mode file_list work_dir" &  vbcrlf & vbcrlf & _ 
     "mode : m(ove) / r(ename) " &  vbcrlf  & _ 
     "list_file : full file path of rename (or move to) rule list" &  vbcrlf  & _ 
     "work_dir :  full path of directory of files to be renamed or moved" &  vbcrlf 
 
-    'ˆø”‚Ì”ƒ`ƒFƒbƒN
+    'ï¿½ï¿½ï¿½ï¿½ï¿½Ìï¿½ï¿½`ï¿½Fï¿½bï¿½N
     If Args.count < 3 Then 
         chkStatus = ERROR
     End If
@@ -96,7 +96,7 @@ Function checkArguments(Args)
     
     ErrMsg = ErrMsg & vbcrlf & "-- Arguments Check --" & vbcrlf
         
-    '‘æ1ˆø”‚Ìƒ`ƒFƒbƒN
+    'ï¿½ï¿½1ï¿½ï¿½ï¿½ï¿½ï¿½Ìƒ`ï¿½Fï¿½bï¿½N
     If Not Lcase(Args(0)) = "m" and not Lcase(Args(0)) = "r" Then
         ErrMsg = ErrMsg & "mode : m(ove) / r(ename) " & vbcrlf
         chkStatus = ERROR
@@ -104,18 +104,18 @@ Function checkArguments(Args)
     
     ListPath=Args(1)
     
-    '‘æ2 ˆø”‚Éƒtƒ@ƒCƒ‹‚ªw’è‚³‚ê‚Ä‚¢‚È‚©‚Á‚½ê‡‚ÌƒfƒtƒHƒ‹ƒgƒtƒ@ƒCƒ‹–¼•t—^
+    'ï¿½ï¿½2 ï¿½ï¿½ï¿½ï¿½ï¿½Éƒtï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½wï¿½è‚³ï¿½ï¿½Ä‚ï¿½ï¿½È‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ê‡ï¿½Ìƒfï¿½tï¿½Hï¿½ï¿½ï¿½gï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½tï¿½^
     If Right(ListPath,1)<>"\" and Right(ListPath,4)<>".txt" Then
         ListPath = ListPath & DefaultListName
     End If
     
-    'U‚è•ª‚¯‹K‘¥ƒŠƒXƒgƒtƒ@ƒCƒ‹‚Ì‘¶İƒ`ƒFƒbƒN
+    'ï¿½Uï¿½è•ªï¿½ï¿½ï¿½Kï¿½ï¿½ï¿½ï¿½ï¿½Xï¿½gï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½Ì‘ï¿½ï¿½İƒ`ï¿½Fï¿½bï¿½N
     If chkFS.FileExists(ListPath)=False Then
         ErrMsg = ErrMsg & "List File Path is Invalid. " & vbcrlf
         chkStatus = ERROR
     End If
 
-    '‘æ3 ˆø”‚ÌƒtƒHƒ‹ƒ_‘¶İƒ`ƒFƒbƒN
+    'ï¿½ï¿½3 ï¿½ï¿½ï¿½ï¿½ï¿½Ìƒtï¿½Hï¿½ï¿½ï¿½_ï¿½ï¿½ï¿½İƒ`ï¿½Fï¿½bï¿½N
     If chkFS.FolderExists(Args(2))=False Then
         ErrMsg = ErrMsg & "Working Directory is not found. " & vbcrlf
         chkStatus = ERROR
