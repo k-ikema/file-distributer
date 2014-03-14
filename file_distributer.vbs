@@ -22,7 +22,7 @@ Mode = Lcase(Args(0))
 Set FileSys = CreateObject("Scripting.FileSystemObject")
 
 ScriptPath = Replace(WScript.ScriptFullName, WScript.ScriptName, "")
-FilePath   = Args(2) '�Ώۃt�@�C���̃t�H���_�p�X
+FilePath   = Args(2) 'リストファイルのパス
 
 set Folder = FileSys.getFolder(FilePath)
 
@@ -67,7 +67,7 @@ Set FileSys = Nothing
 Wscript.echo "Finish."
 
 
-' �����`�F�b�N
+' 引数チェック
 Function checkArguments(Args)
     Dim chkFS
     Dim ErrMsg
@@ -83,7 +83,7 @@ Function checkArguments(Args)
     "list_file : full file path of rename (or move to) rule list" &  vbcrlf  & _ 
     "work_dir :  full path of directory of files to be renamed or moved" &  vbcrlf 
 
-    '�����̐��`�F�b�N
+    '引数の個数チェック
     If Args.count < 3 Then 
         chkStatus = ERROR
     End If
@@ -96,7 +96,7 @@ Function checkArguments(Args)
     
     ErrMsg = ErrMsg & vbcrlf & "-- Arguments Check --" & vbcrlf
         
-    '��1�����̃`�F�b�N
+    '第1引数チェック
     If Not Lcase(Args(0)) = "m" and not Lcase(Args(0)) = "r" Then
         ErrMsg = ErrMsg & "mode : m(ove) / r(ename) " & vbcrlf
         chkStatus = ERROR
@@ -104,18 +104,18 @@ Function checkArguments(Args)
     
     ListPath=Args(1)
     
-    '��2 �����Ƀt�@�C�����w�肳��Ă��Ȃ������ꍇ�̃f�t�H���g�t�@�C�����t�^
+    '第2引数がディレクトリだった場合にデフォルトファイル名付与
     If Right(ListPath,1)<>"\" and Right(ListPath,4)<>".txt" Then
         ListPath = ListPath & DefaultListName
     End If
     
-    '�U�蕪���K�����X�g�t�@�C���̑��݃`�F�b�N
+    '規則リストの存在チェック
     If chkFS.FileExists(ListPath)=False Then
         ErrMsg = ErrMsg & "List File Path is Invalid. " & vbcrlf
         chkStatus = ERROR
     End If
 
-    '��3 �����̃t�H���_���݃`�F�b�N
+    '対象ファイル保存ディレクトリの存在チェック
     If chkFS.FolderExists(Args(2))=False Then
         ErrMsg = ErrMsg & "Working Directory is not found. " & vbcrlf
         chkStatus = ERROR
