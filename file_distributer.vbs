@@ -6,10 +6,13 @@ Dim ScriptPath, ListPath, FilePath
 Dim FileName, RenameFileName, MatchStr, ReplaceStr
 Dim MoveFrom, MoveTo
 Dim Args, Mode
+Dim LogMessage
 
 Const ERROR=0
 Const MOVE="m"
 Const RENAME="r"
+Const RENAMELOG="file_rename.log"
+Const MOVELOG="file_move.log"
 
 Set Args =  Wscript.Arguments
 
@@ -43,6 +46,8 @@ for each File In Folder.Files
                 Case MOVE 
                     MoveFrom = FileSys.BuildPath( FilePath ,File.Name)
                     MoveTo   = FileSys.BuildPath( FilePath ,ReplaceList(1) & "\" & File.Name )
+                    LogMessage = MoveFrom & " ---> " & MoveTo
+                    AddLog MOVELOG, LogMessage
                     FileSys.MoveFile MoveFrom , MoveTo
                     Exit Do
 
@@ -50,6 +55,8 @@ for each File In Folder.Files
                     MatchStr       = ReplaceList(0)
                     ReplaceStr     = ReplaceList(1)
                     RenameFileName = Replace(File.Name, MatchStr, ReplaceStr )
+                    LogMessage = File.Name & " ---> " & RenameFileName
+                    AddLog RENAMELOG, LogMessage
                     File.Name = RenameFileName
 
             End Select
@@ -128,3 +135,19 @@ Function checkArguments(Args)
     checkArguments = chkStatus
     
 end Function
+
+Sub AddLog(LogFile, LogMessage)
+    Const APPEND=8 
+    Dim log
+    Dim FileSys
+wscript.echo LogMessage
+    Set FileSys =  CreateObject("Scripting.FileSystemObject")
+    
+    Set log = FileSys.OpenTextFile(LogFile, APPEND, true)
+    LogMessage = Date() & "-" & Time() & "-" & LogMessage
+    log.WriteLine (LogMessage)
+    
+    Set log = NOTHING
+    Set FileSys = NOTHING
+    
+End Sub
