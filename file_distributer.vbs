@@ -140,7 +140,7 @@ Sub AddLog(LogFile, LogMessage)
     Const APPEND=8 
     Dim log
     Dim FileSys
-wscript.echo LogMessage
+
     Set FileSys =  CreateObject("Scripting.FileSystemObject")
     
     Set log = FileSys.OpenTextFile(LogFile, APPEND, true)
