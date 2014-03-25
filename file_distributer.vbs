@@ -37,9 +37,11 @@ for each File In Folder.Files
     Do Until TextStream.AtEndOfLine = True
         Dim ReplaceList
         Text = TextStream.ReadLine
+        
+        
         ReplaceList = split(Text, ",")
         
-        If InStr(File.Name, ReplaceList(0)) <> 0 Then 
+        If (Left(Trim(Text),1)<>"*") and (InStr(File.Name, ReplaceList(0)) <> 0) Then 
             
             Select Case Mode
 
