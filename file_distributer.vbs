@@ -7,6 +7,7 @@ Dim FileName, RenameFileName, MatchStr, ReplaceStr
 Dim MoveFrom, MoveTo
 Dim Args, Mode
 Dim LogMessage
+Dim c
 
 Const ERROR=0
 Const MOVE="m"
@@ -29,57 +30,50 @@ FilePath   = Args(2) 'リストファイルのパス
 
 set Folder = FileSys.getFolder(FilePath)
 
+    
 for each File In Folder.Files
 
     FileName = File.Name
     Set TextStream = FileSys.OpenTextFile(ListPath, 1)
+    
+    Do Until TextStream.AtEndOfStream = True
 
-    Do Until TextStream.AtEndOfLine = True
         Dim ReplaceList
         Text = TextStream.ReadLine
+
+        If Left(Trim(Text),1)<>"*" and Text<>"" Then
         
-        ' コメント行判定
- Wscript.echo Left(Trim(Text),1)
-        If Left(Trim(Text),1)="*" Then 
-            Exit Do
-        End If
-        
-        ReplaceList = split(Text, ",")
-Wscript.echo Ubound(ReplaceList)+1
-        ' カラム個数チェック
-        If Ubound(ReplaceList)+1<>2 Then 
-            Wscript.echo "Invalid format : " & Text
-            Exit Do
-        End If
-Wscript.echo ReplaceList(0) & " --- " & ReplaceList(1)
-        ' カラム内容の | をカンマに戻す
-        ReplaceList(0) = Replace(ReplaceList(0),"|",",")
-        ReplaceList(1) = Replace(ReplaceList(1),"|",",")
-        
-        If (Left(Trim(Text),1)<>"*") and (InStr(File.Name, ReplaceList(0)) <> 0) Then 
+            ReplaceList = split(Text, ",")
             
-            Select Case Mode
-
-                Case MOVE 
-                    MoveFrom = FileSys.BuildPath( FilePath ,File.Name)
-                    MoveTo   = FileSys.BuildPath( FilePath ,ReplaceList(1) & "\" & File.Name )
-                    LogMessage = MoveFrom & " ---> " & MoveTo
-                    AddLog MOVELOG, LogMessage
-                    FileSys.MoveFile MoveFrom , MoveTo
-                    Exit Do
-
-                Case RENAME
-                    MatchStr       = ReplaceList(0)
-                    ReplaceStr     = ReplaceList(1)
-                    RenameFileName = Replace(File.Name, MatchStr, ReplaceStr )
-                    LogMessage = File.Name & " ---> " & RenameFileName
-                    AddLog RENAMELOG, LogMessage
-                    File.Name = RenameFileName
-
-            End Select
-
-        End If
-    Loop
+            ' カラム内容の | をカンマに戻す
+            ReplaceList(0) = Replace(ReplaceList(0),"|",",")
+            ReplaceList(1) = Replace(ReplaceList(1),"|",",")
+            
+            If InStr(File.Name, ReplaceList(0)) <> 0 Then 
+                
+                Select Case Mode
+    
+                    Case MOVE 
+                        MoveFrom = FileSys.BuildPath( FilePath ,File.Name)
+                        MoveTo   = FileSys.BuildPath( FilePath ,ReplaceList(1) & "\" & File.Name )
+                        LogMessage = MoveFrom & " ---> " & MoveTo
+                        AddLog MOVELOG, LogMessage
+                        FileSys.MoveFile MoveFrom , MoveTo
+                        Exit Do
+    
+                    Case RENAME
+                        MatchStr       = ReplaceList(0)
+                        ReplaceStr     = ReplaceList(1)
+                        RenameFileName = Replace(File.Name, MatchStr, ReplaceStr )
+                        LogMessage = File.Name & " ---> " & RenameFileName
+                        AddLog RENAMELOG, LogMessage
+                        File.Name = RenameFileName
+    
+                End Select
+    
+            End If
+          End If
+      Loop
 
     TextStream.Close
 
