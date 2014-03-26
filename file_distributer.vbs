@@ -84,6 +84,25 @@ Set FileSys = Nothing
 
 Wscript.echo "Finish."
 
+'引数の個数チェック
+Function checkNumOfArguments(Args)
+    chkNumOfArguments = ""
+    If Args.count < 3 Then 
+        chkNumOfArguments = ERROR
+    End If
+end Function
+
+Function checkMode(Args)
+End Function
+
+Function checkListPath(Args)
+End Function
+
+Function checkWorkPath(Args)
+End Function
+
+Sub dispUsage(errMsg)
+End Sub
 
 ' 引数チェック
 Function checkArguments(Args)
