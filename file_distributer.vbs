@@ -38,8 +38,23 @@ for each File In Folder.Files
         Dim ReplaceList
         Text = TextStream.ReadLine
         
+        ' コメント行判定
+ Wscript.echo Left(Trim(Text),1)
+        If Left(Trim(Text),1)="*" Then 
+            Exit Do
+        End If
         
         ReplaceList = split(Text, ",")
+Wscript.echo Ubound(ReplaceList)+1
+        ' カラム個数チェック
+        If Ubound(ReplaceList)+1<>2 Then 
+            Wscript.echo "Invalid format : " & Text
+            Exit Do
+        End If
+Wscript.echo ReplaceList(0) & " --- " & ReplaceList(1)
+        ' カラム内容の | をカンマに戻す
+        ReplaceList(0) = Replace(ReplaceList(0),"|",",")
+        ReplaceList(1) = Replace(ReplaceList(1),"|",",")
         
         If (Left(Trim(Text),1)<>"*") and (InStr(File.Name, ReplaceList(0)) <> 0) Then 
             
@@ -120,13 +135,13 @@ Function checkArguments(Args)
     
     '規則リストの存在チェック
     If chkFS.FileExists(ListPath)=False Then
-        ErrMsg = ErrMsg & "List File Path is Invalid. " & vbcrlf
+        ErrMsg = ErrMsg & "List File Path is Invalid. : " & ListPath & vbcrlf
         chkStatus = ERROR
     End If
 
     '対象ファイル保存ディレクトリの存在チェック
     If chkFS.FolderExists(Args(2))=False Then
-        ErrMsg = ErrMsg & "Working Directory is not found. " & vbcrlf
+        ErrMsg = ErrMsg & "Working Directory is not found. : " & Args(2) & vbcrlf
         chkStatus = ERROR
     End If
     
