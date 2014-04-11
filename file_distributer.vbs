@@ -26,10 +26,9 @@ Mode = Lcase(Args(0))
 Set FileSys = CreateObject("Scripting.FileSystemObject")
 
 ScriptPath = Replace(WScript.ScriptFullName, WScript.ScriptName, "")
-FilePath   = Args(2) 'リストファイルのパス
+FilePath   = Args(2) '処理対象ファイルのパス
 
 set Folder = FileSys.getFolder(FilePath)
-
     
 for each File In Folder.Files
 
@@ -55,10 +54,13 @@ for each File In Folder.Files
     
                     Case MOVE 
                         MoveFrom = FileSys.BuildPath( FilePath ,File.Name)
-                        MoveTo   = FileSys.BuildPath( FilePath ,ReplaceList(1) & "\" & File.Name )
+                        MoveTo   = FileSys.BuildPath( FilePath ,ReplaceList(1))
+                        If FileSys.FolderExists(MoveTo) = False Then
+                            FileSys.createFolder(MoveTo)
+                        End If
                         LogMessage = MoveFrom & " ---> " & MoveTo
                         AddLog MOVELOG, LogMessage
-                        FileSys.MoveFile MoveFrom , MoveTo
+                        FileSys.MoveFile MoveFrom , MoveTo  & "\" & File.Name
                         Exit Do
     
                     Case RENAME
@@ -84,9 +86,29 @@ Set FileSys = Nothing
 
 Wscript.echo "Finish."
 
+'引数の個数チェック
+Function checkNumOfArguments(Args)
+    chkNumOfArguments = ""
+    If Args.count < 3 Then 
+        chkNumOfArguments = ERROR
+    End If
+end Function
+
+Function checkMode(Args)
+End Function
+
+Function checkListPath(Args)
+End Function
+
+Function checkWorkPath(Args)
+End Function
+
+Sub dispUsage(errMsg)
+End Sub
 
 ' 引数チェック
 Function checkArguments(Args)
+
     Dim chkFS
     Dim ErrMsg
     Dim chkStatus
