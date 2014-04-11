@@ -54,7 +54,7 @@ for each File In Folder.Files
     
                     Case MOVE 
                         MoveFrom = FileSys.BuildPath( FilePath ,File.Name)
-                        MoveTo   = FileSys.BuildPath( FilePath ,ReplaceList(1)) '  & "\" & File.Name 
+                        MoveTo   = FileSys.BuildPath( FilePath ,ReplaceList(1))
                         If FileSys.FolderExists(MoveTo) = False Then
                             FileSys.createFolder(MoveTo)
                         End If
